@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using CodeBase.CameraLogic;
 using CodeBase.Infrastructure.Factory;
+using CodeBase.Player;
 using CodeBase.Services.Input;
 using UnityEngine;
 
@@ -44,7 +45,7 @@ namespace CodeBase.Infrastructure.States
     private async Task InitGameWorld()
     {
       GameObject player = await InitPlayer();
-      player.GetComponent<Player>().Constructor(_inputService);
+      player.GetComponent<PlayerMovement>().Constructor(_inputService);
       GameObject hud = await InitHud();
       CameraFollow(player);
     }
