@@ -6,6 +6,7 @@ namespace CodeBase.Minerals
   public class CollectingZone : MonoBehaviour
   {
     [SerializeField] private TriggerObserver _triggerObserver;
+    [SerializeField] private SphereCollider _collectingZoneCollider;
 
     private bool _isCollected;
 
@@ -17,7 +18,7 @@ namespace CodeBase.Minerals
 
     private void TriggerEnter(Collider obj)
     {
-      obj.GetComponent<CollectingMinerals>().AddNewItem(transform);
+      obj.GetComponent<CollectingMinerals>().AddNewItem(_collectingZoneCollider, transform);
     }
 
     private void TriggerExit(Collider obj)

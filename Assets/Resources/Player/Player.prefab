@@ -46,6 +46,8 @@ GameObject:
   - component: {fileID: 154667829328569340}
   - component: {fileID: 3055229951415085311}
   - component: {fileID: 6566887728652917276}
+  - component: {fileID: 6243963335627926967}
+  - component: {fileID: 971210746252231741}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -179,3 +181,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parentMineralObject: {fileID: 2258567475451457845}
   _mineralFlightSpeed: 20
+  _maxMineralCount: 5
+--- !u!114 &6243963335627926967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9145587784256199203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c0faa640766418894e6362f0aa07aac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _triggerObserver: {fileID: 971210746252231741}
+  _collectingMinerals: {fileID: 6566887728652917276}
+  _consumptionMask:
+    serializedVersion: 2
+    m_Bits: 1024
+--- !u!114 &971210746252231741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9145587784256199203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 084cca08b2b6415994cf08adf041ca82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
