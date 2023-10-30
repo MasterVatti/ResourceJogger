@@ -10,10 +10,6 @@ namespace CodeBase.Services.Input
 #if UNITY_IOS || UNITY_ANDROID
     public Vector3 Axis => SimpleInputAxis();
 #else
-    public InputService()
-    {
-      Debug.Log("InputService");
-    }
     public Vector3 Axis
     {
       get
@@ -31,7 +27,7 @@ namespace CodeBase.Services.Input
 
     private static Vector3 UnityAxis()
     {
-      return new Vector3(UnityEngine.Input.GetAxis(Horizontal), 0, UnityEngine.Input.GetAxis(Vertical)).normalized;
+      return new Vector3(UnityEngine.Input.GetAxis(Horizontal), 0, UnityEngine.Input.GetAxis(Vertical));
     }
 #endif
 
