@@ -7,6 +7,7 @@ namespace CodeBase.Minerals
   {
     [SerializeField] private TriggerObserver _triggerObserver;
     [SerializeField] private SphereCollider _collectingZoneCollider;
+    [SerializeField] private MineralStates _mineralStates;
 
     private bool _isCollected;
 
@@ -18,11 +19,12 @@ namespace CodeBase.Minerals
 
     private void TriggerEnter(Collider obj)
     {
-      obj.GetComponent<CollectingMinerals>().AddNewItem(_collectingZoneCollider, transform);
+      obj.GetComponent<CollectingMinerals>().AddNewItem(_mineralStates, _collectingZoneCollider, transform);
     }
 
     private void TriggerExit(Collider obj)
     {
     }
+
   }
 }

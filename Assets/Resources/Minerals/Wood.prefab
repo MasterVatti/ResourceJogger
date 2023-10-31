@@ -71,6 +71,7 @@ GameObject:
   - component: {fileID: 3254864312042819076}
   - component: {fileID: 3254864312042819079}
   - component: {fileID: 3254864312042819199}
+  - component: {fileID: 1717552263465167683}
   m_Layer: 0
   m_Name: Wood
   m_TagString: Untagged
@@ -171,3 +172,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _triggerObserver: {fileID: 3254864310921786144}
   _collectingZoneCollider: {fileID: 3254864310921786147}
+  _mineralStates: {fileID: 1717552263465167683}
+--- !u!114 &1717552263465167683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3254864312042819078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fe4294c24c14532ac74ffa46ce9e4b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

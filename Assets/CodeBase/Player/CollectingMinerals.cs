@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using CodeBase.Minerals;
 using UnityEngine;
 
 namespace CodeBase.Player
@@ -8,27 +11,59 @@ namespace CodeBase.Player
   {
     public int MineralCount { get; set; }
     public float MineralFlightSpeed => _mineralFlightSpeed;
-    public List<GameObject> AllMinerals => _allMinerals;
+    public List<MineralStates> AllMinerals => _allMinerals;
 
     [SerializeField] private Transform _parentMineralObject;
     [SerializeField] private float _mineralFlightSpeed;
     [SerializeField] private int _maxMineralCount;
 
     private List<Coroutine> _coroutines = new();
-    private List<GameObject> _allMinerals = new();
+    private List<MineralStates> _allMinerals = new();
+    private float _journeyLength;
+    private float _startTime;
 
-    public void AddNewItem(SphereCollider collectingZoneCollider, Transform mineralTransform)
+    public void AddNewItem(MineralStates mineralStates, SphereCollider collectingZoneCollider,
+      Transform mineralTransform)
     {
       if (_allMinerals.Count >= _maxMineralCount) return;
-      MineralCount += 1;
+      // MineralCount += 1;
       collectingZoneCollider.enabled = false;
-      _allMinerals.Add(mineralTransform.gameObject);
-      _coroutines.Add(StartCoroutine(MoveMineral(mineralTransform)));
+      
+      _allMinerals.Add(mineralStates);
+      _journeyLength = Vector3.Distance(mineralStates.transform.position, _parentMineralObject.position);
+      _startTime = Time.time;
+      // Debug.Log($"!_allMinerals.First(state => state.IsInsideBag == false) = {!_allMinerals.First(state => state.IsInsideBag == false)}");
+      // _coroutines.Add(StartCoroutine(MoveMineral(mineralTransform)));
     }
 
-    public void ClearCoroutineList()
+    private void FixedUpdate()
     {
-      _coroutines.Clear();
+      if (_allMinerals.Count <= 0 || _allMinerals.All(state => state.IsInsideBag))
+      {
+        return;
+      }
+
+      for (int i = 0; i < _allMinerals.Count; i++)
+      {
+        if (!_allMinerals[i].IsInsideBag)
+        {
+          float fractionOfJourney = CountPartOfJourney(_startTime, _journeyLength);
+          Vector3 targetPosition = CountTargetPosition(i);
+          // Debug.Log($"i = {i}, targetPosition = {targetPosition}");
+          _allMinerals[i].transform.position = Vector3.Lerp(_allMinerals[i].transform.position, targetPosition, fractionOfJourney);
+          if (_allMinerals[i].transform.position == targetPosition)
+          {
+            _allMinerals[i].transform.SetParent(_parentMineralObject);
+            _allMinerals[i].IsInsideBag = true;
+          }
+        }
+      }
+    }
+
+    public void DeleteMineralFromBag(MineralStates mineral)
+    {
+      // mineral.IsInsideBag = false;
+      _allMinerals.Remove(mineral);
     }
 
     private IEnumerator MoveMineral(Transform mineralTransform, float countTime = 0.02f)
@@ -61,7 +96,7 @@ namespace CodeBase.Player
     private Vector3 CountTargetPosition(int count)
     {
       Vector3 targetPosition = _parentMineralObject.position;
-      targetPosition.y = count * 0.25f;
+      targetPosition.y = count * 0.3f + 0.2f;
       return targetPosition;
     }
 

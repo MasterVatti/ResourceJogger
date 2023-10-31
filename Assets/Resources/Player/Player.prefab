@@ -180,8 +180,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parentMineralObject: {fileID: 2258567475451457845}
-  _mineralFlightSpeed: 20
-  _maxMineralCount: 5
+  _mineralFlightSpeed: 15
+  _maxMineralCount: 10
 --- !u!114 &6243963335627926967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,6 +199,7 @@ MonoBehaviour:
   _consumptionMask:
     serializedVersion: 2
     m_Bits: 1024
+  _mineralFlightSpeed: 3
 --- !u!114 &971210746252231741
 MonoBehaviour:
   m_ObjectHideFlags: 0
