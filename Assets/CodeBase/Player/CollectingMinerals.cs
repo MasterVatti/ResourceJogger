@@ -22,8 +22,7 @@ namespace CodeBase.Player
     private float _journeyLength;
     private float _startTime;
 
-    public void AddNewItem(MineralStates mineralStates, SphereCollider collectingZoneCollider,
-      Transform mineralTransform)
+    public void AddNewItem(MineralStates mineralStates, SphereCollider collectingZoneCollider)
     {
       if (_allMinerals.Count >= _maxMineralCount) return;
       // MineralCount += 1;
@@ -33,7 +32,6 @@ namespace CodeBase.Player
       _journeyLength = Vector3.Distance(mineralStates.transform.position, _parentMineralObject.position);
       _startTime = Time.time;
       // Debug.Log($"!_allMinerals.First(state => state.IsInsideBag == false) = {!_allMinerals.First(state => state.IsInsideBag == false)}");
-      // _coroutines.Add(StartCoroutine(MoveMineral(mineralTransform)));
     }
 
     private void FixedUpdate()
@@ -66,26 +64,6 @@ namespace CodeBase.Player
       _allMinerals.Remove(mineral);
     }
 
-    private IEnumerator MoveMineral(Transform mineralTransform, float countTime = 0.02f)
-    {
-      float time = 3f;
-      float startTime = Time.time;
-      float journeyLength = Vector3.Distance(mineralTransform.position, _parentMineralObject.position);
-      int count = MineralCount;
-
-      while (time > 0f)
-      {
-        time -= countTime;
-        float fractionOfJourney = CountPartOfJourney(startTime, journeyLength);
-        Vector3 targetPosition = CountTargetPosition(count);
-
-        mineralTransform.position = Vector3.Lerp(mineralTransform.position, targetPosition, fractionOfJourney);
-        if (mineralTransform.position == targetPosition) ExitCoroutine(mineralTransform);
-
-        yield return new WaitForSeconds(countTime);
-      }
-    }
-
     private float CountPartOfJourney(float startTime, float journeyLength)
     {
       float distanceCovered = (Time.time - startTime) * _mineralFlightSpeed;
@@ -98,13 +76,6 @@ namespace CodeBase.Player
       Vector3 targetPosition = _parentMineralObject.position;
       targetPosition.y = count * 0.3f + 0.2f;
       return targetPosition;
-    }
-
-    private void ExitCoroutine(Transform mineralTransform)
-    {
-      mineralTransform.SetParent(_parentMineralObject);
-      int num = _allMinerals.FindIndex(mineral => mineralTransform.gameObject == mineral);
-      StopCoroutine(_coroutines[num]);
     }
   }
 }

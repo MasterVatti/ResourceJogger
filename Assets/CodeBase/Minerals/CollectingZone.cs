@@ -19,7 +19,7 @@ namespace CodeBase.Minerals
 
     private void TriggerEnter(Collider obj)
     {
-      obj.GetComponent<CollectingMinerals>().AddNewItem(_mineralStates, _collectingZoneCollider, transform);
+      obj.GetComponent<CollectingMinerals>().AddNewItem(_mineralStates, _collectingZoneCollider);
     }
 
     private void TriggerExit(Collider obj)
