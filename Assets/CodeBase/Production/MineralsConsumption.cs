@@ -27,7 +27,8 @@ namespace CodeBase.Production
     [SerializeField] private int _maxStorageLines;
     [SerializeField] private List<StoragePoint> _storagePoints;
     [SerializeField] private float _mineralFlightSpeed;
-    [SerializeField] private float _cooldown = 1f;
+    [SerializeField] private float _cooldown;
+    [SerializeField] private MineralsProduction _mineralsProduction;
 
     private List<GameObject> _consumptionStorageMinerals = new();
     private List<MineralStates> _mineralStates = new();
@@ -91,22 +92,13 @@ namespace CodeBase.Production
         _currentMineral = _mineralStates.LastOrDefault();
         _currentTempPoint = _tempPoints.LastOrDefault();
         _currentJourneyLength = _journeyLengths.LastOrDefault();
-        // _secondCounter -= 1;
-        // Destroy(mineral);
-        // _currentTime = 0f;
         _startTime = Time.time;
+        _mineralsProduction.AddMineralToProduction();
         // _collectingMinerals.DeleteMineralFromBag(_collectingMinerals.AllMinerals[i]);
       }
 
     }
-    private float CountPartOfJourney(float startTime, float journeyLength)
-    {
-      // Debug.Log($"Time.time = {Time.time}, startTime = {startTime}");
-      float distanceCovered = (Time.time - startTime) * _mineralFlightSpeed;
-      float fractionOfJourney = distanceCovered / journeyLength;
-      // Debug.Log($"distanceCovered = {distanceCovered}, journeyLength = {journeyLength}, fractionOfJourney = {fractionOfJourney}");
-      return fractionOfJourney;
-    }
+
     public void SetValues(MineralStates mineral, StoragePoint storagePoint)
     {
       if (_mineralStates.Count <= 0)
@@ -119,6 +111,15 @@ namespace CodeBase.Production
       _tempPoints.Add(storagePoint);
       _startTime = Time.time;
       _journeyLengths.Add(Vector3.Distance(mineral.transform.position, _targetPoint.transform.position));
+    }
+
+    private float CountPartOfJourney(float startTime, float journeyLength)
+    {
+      // Debug.Log($"Time.time = {Time.time}, startTime = {startTime}");
+      float distanceCovered = (Time.time - startTime) * _mineralFlightSpeed;
+      float fractionOfJourney = distanceCovered / journeyLength;
+      // Debug.Log($"distanceCovered = {distanceCovered}, journeyLength = {journeyLength}, fractionOfJourney = {fractionOfJourney}");
+      return fractionOfJourney;
     }
   }
 }

@@ -9,8 +9,6 @@ namespace CodeBase.Minerals
     [SerializeField] private SphereCollider _collectingZoneCollider;
     [SerializeField] private MineralStates _mineralStates;
 
-    private bool _isCollected;
-
     private void Start()
     {
       _triggerObserver.TriggerEnter += TriggerEnter;

@@ -27,7 +27,12 @@ namespace CodeBase.Player
       if (_allMinerals.Count >= _maxMineralCount) return;
       // MineralCount += 1;
       collectingZoneCollider.enabled = false;
-      
+      StoragePoint storagePoint = mineralStates.GetComponentInParent<StoragePoint>();
+      if (storagePoint != null)
+      {
+        Debug.Log("storagePoint.IsInsideStorage = false");
+        storagePoint.IsInsideStorage = false;
+      }
       _allMinerals.Add(mineralStates);
       _journeyLength = Vector3.Distance(mineralStates.transform.position, _parentMineralObject.position);
       _startTime = Time.time;

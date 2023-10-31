@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using CodeBase.Infrastructure.AssetManagement;
+using CodeBase.Minerals;
 using UnityEngine;
 
 namespace CodeBase.Infrastructure.Factory
@@ -16,6 +17,9 @@ namespace CodeBase.Infrastructure.Factory
     }
 
     public async Task<GameObject> CreatePlayer(Vector3 at) => PlayerGameObject = _assets.Instantiate(AssetPath.PlayerPath, at);
+
     public async Task<GameObject> CreateHud() => _assets.Instantiate(AssetPath.HudPath);
+
+    public MineralStates CreateMineral(MineralStates prefab, Transform parent) => _assets.Instantiate(prefab, parent);
   }
 }
