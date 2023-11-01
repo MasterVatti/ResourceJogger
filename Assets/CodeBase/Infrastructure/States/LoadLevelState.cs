@@ -55,7 +55,6 @@ namespace CodeBase.Infrastructure.States
 
     private async Task<GameObject> InitHud() => await _gameFactory.CreateHud();
 
-    private void CameraFollow(GameObject player) =>
-      Camera.main.GetComponent<CameraFollow>().Follow(player);
+    private void CameraFollow(GameObject player) => Camera.main.GetComponent<CameraFollow>().Follow(player);
   }
 }

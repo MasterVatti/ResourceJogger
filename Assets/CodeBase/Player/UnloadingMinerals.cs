@@ -1,12 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using CodeBase.Minerals;
 using CodeBase.Production;
-using CodeBase.Services;
 using UnityEngine;
-using Zenject;
 
 namespace CodeBase.Player
 {
@@ -16,16 +11,11 @@ namespace CodeBase.Player
     [SerializeField] private CollectingMinerals _collectingMinerals;
     [SerializeField] private LayerMask _consumptionMask;
     [SerializeField] private float _mineralFlightSpeed;
-    
-    private Transform _consumptionStartingPoint;
+
     private MineralsConsumption _mineralsConsumption;
-    private List<Coroutine> _coroutines = new();
-    private List<GameObject> _minerals = new();
     private bool _isEnteredConsumptionZone;
     private bool _isFirstEnteredTrigger;
     private float _startTime;
-    private int _counter;
-    private List<float> _journeyLength = new();
 
     private void Start()
     {
@@ -39,10 +29,8 @@ namespace CodeBase.Player
       {
         if (_isFirstEnteredTrigger) return;
         _isFirstEnteredTrigger = true;
-        Debug.Log("OnTriggerEnter");
-        _mineralsConsumption = obj.GetComponent<MineralsConsumption>();
-        _startTime = Time.time;
         _isEnteredConsumptionZone = true;
+        SetInitialValues(obj);
       }
     }
 
@@ -50,7 +38,6 @@ namespace CodeBase.Player
     {
       if ((_consumptionMask.value & (1 << obj.gameObject.layer)) != 0)
       {
-        Debug.Log("OnTriggerExit");
         _isEnteredConsumptionZone = false;
         _isFirstEnteredTrigger = false;
       }
@@ -58,41 +45,50 @@ namespace CodeBase.Player
 
     private void FixedUpdate()
     {
-      if (!_isEnteredConsumptionZone) return;
-      if (_collectingMinerals.AllMinerals.Count <= 0) return;
+      if (!_isEnteredConsumptionZone || _collectingMinerals.AllBagMinerals.Count <= 0) return;
 
-      MineralStates mineral = _collectingMinerals.AllMinerals.Last();
+      MineralStates mineral = _collectingMinerals.AllBagMinerals.Last();
       StoragePoint targetPoint = _mineralsConsumption.StoragePoints.FirstOrDefault(point => !point.IsInsideStorage);
       if (targetPoint == null)
       {
-        //todo: Need test
         _startTime = Time.time;
         return;
       }
-      
+
+      UnloadMineral(mineral, targetPoint);
+    }
+
+    private void UnloadMineral(MineralStates mineral, StoragePoint targetPoint)
+    {
       mineral.transform.SetParent(targetPoint.transform);
-        
-      // Debug.Log($"targetPoint.transform.position = {targetPoint.transform.position}");
-      float journeyLength = Vector3.Distance(mineral.transform.position,
-        targetPoint.transform.position);
-        
-      float fractionOfJourney = CountPartOfJourney(_startTime, journeyLength);
-      mineral.transform.position =
-        Vector3.Lerp(mineral.transform.position, targetPoint.transform.position, fractionOfJourney);
-        
+      MoveMineral(mineral, targetPoint);
+
       if (mineral.transform.position == targetPoint.transform.position)
       {
-        // Debug.Log($"targetPoint.transform.position = {targetPoint.transform.position}");
         _collectingMinerals.DeleteMineralFromBag(mineral);
         targetPoint.IsInsideStorage = true;
         _mineralsConsumption.AddMineralToConsumption(mineral, targetPoint);
       }
     }
+
+    private void MoveMineral(MineralStates mineral, StoragePoint targetPoint)
+    {
+      float journeyLength = Vector3.Distance(mineral.transform.position, targetPoint.transform.position);
+      float fractionOfJourney = CountPartOfJourney(_startTime, journeyLength);
+      mineral.transform.position = Vector3.Lerp(mineral.transform.position, targetPoint.transform.position, fractionOfJourney);
+    }
+
     private float CountPartOfJourney(float startTime, float journeyLength)
     {
       float distanceCovered = (Time.time - startTime) * _mineralFlightSpeed;
       float fractionOfJourney = distanceCovered / journeyLength;
       return fractionOfJourney;
+    }
+
+    private void SetInitialValues(Collider obj)
+    {
+      _mineralsConsumption = obj.GetComponent<MineralsConsumption>();
+      _startTime = Time.time;
     }
   }
 }

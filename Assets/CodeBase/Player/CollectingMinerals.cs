@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using CodeBase.Minerals;
@@ -9,66 +7,52 @@ namespace CodeBase.Player
 {
   public class CollectingMinerals : MonoBehaviour
   {
-    public int MineralCount { get; set; }
-    public float MineralFlightSpeed => _mineralFlightSpeed;
-    public List<MineralStates> AllMinerals => _allMinerals;
+    public List<MineralStates> AllBagMinerals => _allBagMinerals;
 
     [SerializeField] private Transform _parentMineralObject;
     [SerializeField] private float _mineralFlightSpeed;
     [SerializeField] private int _maxMineralCount;
 
-    private List<Coroutine> _coroutines = new();
-    private List<MineralStates> _allMinerals = new();
+    private List<MineralStates> _allBagMinerals = new();
     private float _journeyLength;
     private float _startTime;
 
-    public void AddNewItem(MineralStates mineralStates, SphereCollider collectingZoneCollider)
-    {
-      if (_allMinerals.Count >= _maxMineralCount) return;
-      if (_allMinerals.Count > 0) if (mineralStates.MineralType != _allMinerals[0].MineralType) return;
-      
-      // MineralCount += 1;
-      collectingZoneCollider.enabled = false;
-      StoragePoint storagePoint = mineralStates.GetComponentInParent<StoragePoint>();
-      if (storagePoint != null)
-      {
-        Debug.Log("storagePoint.IsInsideStorage = false");
-        storagePoint.IsInsideStorage = false;
-      }
-      _allMinerals.Add(mineralStates);
-      _journeyLength = Vector3.Distance(mineralStates.transform.position, _parentMineralObject.position);
-      _startTime = Time.time;
-      // Debug.Log($"!_allMinerals.First(state => state.IsInsideBag == false) = {!_allMinerals.First(state => state.IsInsideBag == false)}");
-    }
-
     private void FixedUpdate()
     {
-      if (_allMinerals.Count <= 0 || _allMinerals.All(state => state.IsInsideBag))
-      {
-        return;
-      }
+      if (_allBagMinerals.Count <= 0 || _allBagMinerals.All(state => state.IsInsideBag)) return;
 
-      for (int i = 0; i < _allMinerals.Count; i++)
-      {
-        if (!_allMinerals[i].IsInsideBag)
-        {
-          float fractionOfJourney = CountPartOfJourney(_startTime, _journeyLength);
-          Vector3 targetPosition = CountTargetPosition(i);
-          // Debug.Log($"i = {i}, targetPosition = {targetPosition}");
-          _allMinerals[i].transform.position = Vector3.Lerp(_allMinerals[i].transform.position, targetPosition, fractionOfJourney);
-          if (_allMinerals[i].transform.position == targetPosition)
-          {
-            _allMinerals[i].transform.SetParent(_parentMineralObject);
-            _allMinerals[i].IsInsideBag = true;
-          }
-        }
-      }
+      for (int i = 0; i < _allBagMinerals.Count; i++) AddMineralToBag(i);
     }
 
-    public void DeleteMineralFromBag(MineralStates mineral)
+    public void AddNewItem(MineralStates mineralStates, SphereCollider collectingZoneCollider)
     {
-      // mineral.IsInsideBag = false;
-      _allMinerals.Remove(mineral);
+      if (_allBagMinerals.Count >= _maxMineralCount) return;
+      if (_allBagMinerals.Count > 0) if (mineralStates.MineralType != _allBagMinerals[0].MineralType) return;
+
+      collectingZoneCollider.enabled = false;
+      StoragePoint storagePoint = mineralStates.GetComponentInParent<StoragePoint>();
+      if (storagePoint != null) storagePoint.IsInsideStorage = false;
+
+      SetInitialValues(mineralStates);
+    }
+
+    public void DeleteMineralFromBag(MineralStates mineral) => _allBagMinerals.Remove(mineral);
+
+    private void AddMineralToBag(int i)
+    {
+      if (!_allBagMinerals[i].IsInsideBag)
+      {
+        float fractionOfJourney = CountPartOfJourney(_startTime, _journeyLength);
+        Vector3 targetPosition = CountTargetPosition(i);
+        _allBagMinerals[i].transform.position =
+          Vector3.Lerp(_allBagMinerals[i].transform.position, targetPosition, fractionOfJourney);
+
+        if (_allBagMinerals[i].transform.position == targetPosition)
+        {
+          _allBagMinerals[i].transform.SetParent(_parentMineralObject);
+          _allBagMinerals[i].IsInsideBag = true;
+        }
+      }
     }
 
     private float CountPartOfJourney(float startTime, float journeyLength)
@@ -83,6 +67,13 @@ namespace CodeBase.Player
       Vector3 targetPosition = _parentMineralObject.position;
       targetPosition.y = count * 0.3f + 0.2f;
       return targetPosition;
+    }
+
+    private void SetInitialValues(MineralStates mineralStates)
+    {
+      _allBagMinerals.Add(mineralStates);
+      _journeyLength = Vector3.Distance(mineralStates.transform.position, _parentMineralObject.position);
+      _startTime = Time.time;
     }
   }
 }
