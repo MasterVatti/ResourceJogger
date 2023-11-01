@@ -17,6 +17,7 @@ namespace CodeBase.Production
     [SerializeField] private List<StoragePoint> _storagePoints;
 
     private List<MineralStates> _mineralStates = new();
+    private List<StoragePoint> _tempPoints = new();
     private List<float> _journeyLengths = new();
 
     private MineralStates _currentMineral;
@@ -50,6 +51,7 @@ namespace CodeBase.Production
 
       _currentCooldownTime = 0f;
       _mineralStates.Add(mineral);
+      _tempPoints.Add(storagePoint);
       _journeyLengths.Add(journeyLength);
     }
 
@@ -65,12 +67,14 @@ namespace CodeBase.Production
     {
       _currentTempPoint.IsInsideStorage = false;
       _mineralStates.Remove(_currentMineral);
+      _tempPoints.Remove(_currentTempPoint);
       _journeyLengths.Remove(_currentJourneyLength);
 
       _mineralsProduction.AddMineralToProduction(_currentMineral);
       Destroy(_currentMineral.gameObject);
 
       _currentMineral = _mineralStates.FirstOrDefault();
+      _currentTempPoint = _tempPoints.FirstOrDefault();
       _currentJourneyLength = _journeyLengths.FirstOrDefault();
 
       _currentCooldownTime = 0f;
