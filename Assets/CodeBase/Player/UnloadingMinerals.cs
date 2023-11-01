@@ -63,7 +63,12 @@ namespace CodeBase.Player
 
       MineralStates mineral = _collectingMinerals.AllMinerals.Last();
       StoragePoint targetPoint = _mineralsConsumption.StoragePoints.FirstOrDefault(point => !point.IsInsideStorage);
-      if (targetPoint == null) return;
+      if (targetPoint == null)
+      {
+        //todo: Need test
+        _startTime = Time.time;
+        return;
+      }
       
       mineral.transform.SetParent(targetPoint.transform);
         
@@ -80,7 +85,7 @@ namespace CodeBase.Player
         // Debug.Log($"targetPoint.transform.position = {targetPoint.transform.position}");
         _collectingMinerals.DeleteMineralFromBag(mineral);
         targetPoint.IsInsideStorage = true;
-        _mineralsConsumption.SetValues(mineral, targetPoint);
+        _mineralsConsumption.AddMineralToConsumption(mineral, targetPoint);
       }
     }
     private float CountPartOfJourney(float startTime, float journeyLength)

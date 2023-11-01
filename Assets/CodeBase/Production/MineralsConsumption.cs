@@ -44,6 +44,10 @@ namespace CodeBase.Production
     private MineralStates _currentMineral;
     private StoragePoint _currentTempPoint;
     private float _currentJourneyLength;
+    private List<float> _startTimes = new();
+    
+    [SerializeField] private int _interpolationFramesCount = 45;
+    private int _elapsedFrames = 0;
     
     private void Update()
     {
@@ -54,71 +58,63 @@ namespace CodeBase.Production
     {
       if (_mineralStates.Count <= 0)
       {
-        _currentTime = 0f;
         return;
       }
       
-      if (_currentTime < _cooldown)
-      { 
-        return;
-      }
-
       if (_currentMineral == null)
       {
         return;
       }
-      // Debug.Log($"_counter = {_counter}");
-      // _currentMineral = _mineralStates.Last();
-      // float startTime = _startTime.Last();
-      // float journeyLength = _journeyLengths.Last();
-
-
-      // float journeyLength = Vector3.Distance(mineral.transform.position, _targetPoint.transform.position);
-        
+      if (_currentTime < _cooldown)
+      { 
+        return;
+      }
       float fractionOfJourney = CountPartOfJourney(_startTime, _currentJourneyLength);
       _currentMineral.transform.position =
         Vector3.Lerp(_currentMineral.transform.position, _targetPoint.transform.position, fractionOfJourney);
-        
       if (_currentMineral.transform.position == _targetPoint.transform.position)
       {
-        // Debug.Log($"_targetPoint.transform.position = {_targetPoint.transform.position}");
-        // _storagePoints.Last(point => point.IsInsideStorage).IsInsideStorage = false;
-        // StoragePoint point = _tempPoints.Last();
-        // point.IsInsideStorage = false;
+
+        _counter += 1;
         _currentTempPoint.IsInsideStorage = false;
-        _tempPoints.Remove(_currentTempPoint);
         _mineralStates.Remove(_currentMineral);
+        _tempPoints.Remove(_currentTempPoint);
         _journeyLengths.Remove(_currentJourneyLength);
-        _currentMineral = _mineralStates.LastOrDefault();
-        _currentTempPoint = _tempPoints.LastOrDefault();
-        _currentJourneyLength = _journeyLengths.LastOrDefault();
+        _mineralsProduction.AddMineralToProduction(_currentMineral);
+        Destroy(_currentMineral.gameObject);
+        _currentMineral = _mineralStates.FirstOrDefault();
+        _currentTempPoint = _tempPoints.FirstOrDefault();
+        _currentJourneyLength = _journeyLengths.FirstOrDefault();
+
+
+        _currentTime = 0f;
         _startTime = Time.time;
-        _mineralsProduction.AddMineralToProduction();
-        // _collectingMinerals.DeleteMineralFromBag(_collectingMinerals.AllMinerals[i]);
+
       }
 
     }
 
-    public void SetValues(MineralStates mineral, StoragePoint storagePoint)
+    public void AddMineralToConsumption(MineralStates mineral, StoragePoint storagePoint)
     {
+      float journeyLength = Vector3.Distance(mineral.transform.position, _targetPoint.transform.position);
       if (_mineralStates.Count <= 0)
       {
         _currentMineral = mineral;
         _currentTempPoint = storagePoint;
-        _currentJourneyLength = Vector3.Distance(mineral.transform.position, _targetPoint.transform.position);
+        _currentJourneyLength = journeyLength;
+        _startTime = Time.time;
       }
+      _currentTime = 0f;
+
       _mineralStates.Add(mineral);
       _tempPoints.Add(storagePoint);
-      _startTime = Time.time;
-      _journeyLengths.Add(Vector3.Distance(mineral.transform.position, _targetPoint.transform.position));
+      _journeyLengths.Add(journeyLength);
     }
 
     private float CountPartOfJourney(float startTime, float journeyLength)
     {
-      // Debug.Log($"Time.time = {Time.time}, startTime = {startTime}");
       float distanceCovered = (Time.time - startTime) * _mineralFlightSpeed;
       float fractionOfJourney = distanceCovered / journeyLength;
-      // Debug.Log($"distanceCovered = {distanceCovered}, journeyLength = {journeyLength}, fractionOfJourney = {fractionOfJourney}");
       return fractionOfJourney;
     }
   }

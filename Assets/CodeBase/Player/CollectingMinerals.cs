@@ -25,6 +25,8 @@ namespace CodeBase.Player
     public void AddNewItem(MineralStates mineralStates, SphereCollider collectingZoneCollider)
     {
       if (_allMinerals.Count >= _maxMineralCount) return;
+      if (_allMinerals.Count > 0) if (mineralStates.MineralType != _allMinerals[0].MineralType) return;
+      
       // MineralCount += 1;
       collectingZoneCollider.enabled = false;
       StoragePoint storagePoint = mineralStates.GetComponentInParent<StoragePoint>();

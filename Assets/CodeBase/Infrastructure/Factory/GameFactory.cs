@@ -20,6 +20,7 @@ namespace CodeBase.Infrastructure.Factory
 
     public async Task<GameObject> CreateHud() => _assets.Instantiate(AssetPath.HudPath);
 
-    public MineralStates CreateMineral(MineralStates prefab, Transform parent) => _assets.Instantiate(prefab, parent);
+    public MineralStates CreateMineral(MineralStates prefab, Vector3 position, Quaternion rotation) =>
+      _assets.Instantiate(prefab, position, rotation);
   }
 }

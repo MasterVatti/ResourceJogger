@@ -17,6 +17,7 @@ namespace CodeBase.Infrastructure.AssetManagement
       return Object.Instantiate(prefab);
     }
 
-    public MineralStates Instantiate(MineralStates prefab, Transform parent) => Object.Instantiate(prefab, parent);
+    public MineralStates Instantiate(MineralStates prefab, Vector3 position, Quaternion rotation) =>
+      Object.Instantiate(prefab, position, rotation);
   }
 }
