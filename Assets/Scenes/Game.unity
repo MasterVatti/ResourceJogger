@@ -245,6 +245,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f67ae8d93514ac7b8841740afd06866, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mineralPrefab: {fileID: 1717552263465167683, guid: 5d73c2833f6844338abd7911bbaa0ce3, type: 3}
+  _startPointPosition: {fileID: 189472921}
+  _mineralFlightSpeed: 0.4
+  _cooldown: 0.5
   _storagePoints:
   - {fileID: 300683119}
   - {fileID: 1509257941}
@@ -258,10 +262,6 @@ MonoBehaviour:
   - {fileID: 764719119}
   - {fileID: 231611268}
   - {fileID: 1946476476}
-  _mineralPrefab: {fileID: 1717552263465167683, guid: 5d73c2833f6844338abd7911bbaa0ce3, type: 3}
-  _startPointPosition: {fileID: 189472921}
-  _mineralFlightSpeed: 0.4
-  _cooldown: 0.5
 --- !u!1 &88317013
 GameObject:
   m_ObjectHideFlags: 0
@@ -722,10 +722,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a54563177044010be3d14052509c37e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _startingPoint: {fileID: 869849610}
   _targetPoint: {fileID: 594029137}
-  _maxStorageCapacity: 10
-  _maxStorageLines: 2
+  _mineralsProduction: {fileID: 2135791870}
+  _mineralFlightSpeed: 0.85
+  _cooldown: 0
+  _consumeMineralType: 00000000
   _storagePoints:
   - {fileID: 869849609}
   - {fileID: 1565042064}
@@ -739,10 +740,6 @@ MonoBehaviour:
   - {fileID: 1187790562}
   - {fileID: 752344168}
   - {fileID: 1879811388}
-  _mineralFlightSpeed: 0.85
-  _cooldown: 0
-  _mineralsProduction: {fileID: 2135791870}
-  _interpolationFramesCount: 45
 --- !u!114 &302853130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2946,10 +2943,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a54563177044010be3d14052509c37e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _startingPoint: {fileID: 1761667935}
   _targetPoint: {fileID: 919390612}
-  _maxStorageCapacity: 10
-  _maxStorageLines: 2
+  _mineralsProduction: {fileID: 1651692410}
+  _mineralFlightSpeed: 0.85
+  _cooldown: 0
+  _consumeMineralType: 0000000001000000
   _storagePoints:
   - {fileID: 1761667934}
   - {fileID: 657719943}
@@ -2963,10 +2961,6 @@ MonoBehaviour:
   - {fileID: 1680953678}
   - {fileID: 964282794}
   - {fileID: 141877441}
-  _mineralFlightSpeed: 0.85
-  _cooldown: 0
-  _mineralsProduction: {fileID: 1651692410}
-  _interpolationFramesCount: 45
 --- !u!114 &1220119176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3820,7 +3814,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a632d3e337ff43efa9c085a007421edf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxStorage: 10
+  _startPointPosition: {fileID: 919390612}
+  _mineralPrefab: {fileID: 1717552263465167683, guid: 6bf6601a263b74811bb1b51e52891ad8, type: 3}
+  _mineralsConsumption: {fileID: 1220119175}
+  _productionMineralType: 2
+  _mineralFlightSpeed: 0.3
+  _cooldown: 2
   _storagePoints:
   - {fileID: 1090753235}
   - {fileID: 1239358565}
@@ -3830,14 +3829,6 @@ MonoBehaviour:
   - {fileID: 2098617163}
   - {fileID: 451635010}
   - {fileID: 1442803225}
-  _mineralsConsumption: {fileID: 1220119175}
-  _makeMineralTime: 2
-  _mineralFlightSpeed: 0.3
-  _cooldown: 2
-  _mineralPrefab: {fileID: 1717552263465167683, guid: 6bf6601a263b74811bb1b51e52891ad8, type: 3}
-  _startPointPosition: {fileID: 919390612}
-  _consumptionMineralTypes: 0000000001000000
-  _productionMineralType: 2
 --- !u!23 &1651692411
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4500,7 +4491,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a632d3e337ff43efa9c085a007421edf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxStorage: 10
+  _startPointPosition: {fileID: 594029137}
+  _mineralPrefab: {fileID: 1717552263465167683, guid: f451fb10cba6544e0a5b761b956b79cf, type: 3}
+  _mineralsConsumption: {fileID: 302853129}
+  _productionMineralType: 1
+  _mineralFlightSpeed: 0.35
+  _cooldown: 1.5
   _storagePoints:
   - {fileID: 1086674588}
   - {fileID: 356067116}
@@ -4526,14 +4522,6 @@ MonoBehaviour:
   - {fileID: 1649216498}
   - {fileID: 88317015}
   - {fileID: 2041003118}
-  _mineralsConsumption: {fileID: 302853129}
-  _makeMineralTime: 2
-  _mineralFlightSpeed: 0.35
-  _cooldown: 1.5
-  _mineralPrefab: {fileID: 1717552263465167683, guid: f451fb10cba6544e0a5b761b956b79cf, type: 3}
-  _startPointPosition: {fileID: 594029137}
-  _consumptionMineralTypes: 00000000
-  _productionMineralType: 1
 --- !u!23 &2135791871
 MeshRenderer:
   m_ObjectHideFlags: 0

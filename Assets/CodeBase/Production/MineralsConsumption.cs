@@ -9,11 +9,13 @@ namespace CodeBase.Production
   public class MineralsConsumption : MonoBehaviour
   {
     public List<StoragePoint> StoragePoints => _storagePoints;
+    public List<MineralType> ConsumeMineralType => _consumeMineralType;
 
     [SerializeField] private Transform _targetPoint;
     [SerializeField] private MineralsProduction _mineralsProduction;
     [SerializeField] private float _mineralFlightSpeed;
     [SerializeField] private float _cooldown;
+    [SerializeField] private List<MineralType> _consumeMineralType;
     [SerializeField] private List<StoragePoint> _storagePoints;
 
     private List<MineralStates> _mineralStates = new();

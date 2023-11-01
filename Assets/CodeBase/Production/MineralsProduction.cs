@@ -11,9 +11,9 @@ namespace CodeBase.Production
 {
   public class MineralsProduction : MonoBehaviour
   {
-    [SerializeField] private MineralStates _mineralPrefab;
     [SerializeField] private Transform _startPointPosition;
-    [SerializeField] private List<MineralType> _consumptionMineralTypes;
+    [SerializeField] private MineralStates _mineralPrefab;
+    [SerializeField] private MineralsConsumption _mineralsConsumption;
     [SerializeField] private MineralType _productionMineralType;
     [SerializeField] private float _mineralFlightSpeed;
     [SerializeField] private float _cooldown;
@@ -37,7 +37,7 @@ namespace CodeBase.Production
 
     private void Start()
     {
-      _productionCount = new int[_consumptionMineralTypes.Count];
+      _productionCount = new int[_mineralsConsumption.ConsumeMineralType.Count];
       _currentTargetPoint = _storagePoints.FirstOrDefault(point => !point.IsInsideStorage);
       SetCurrentMineral();
     }
@@ -85,8 +85,8 @@ namespace CodeBase.Production
     {
       if (_isFirstAddedMineral) _isFirstAddedMineral = false;
 
-      for (var i = 0; i < _consumptionMineralTypes.Count; i++)
-        if (mineral.MineralType == _consumptionMineralTypes[i])
+      for (var i = 0; i < _mineralsConsumption.ConsumeMineralType.Count; i++)
+        if (mineral.MineralType == _mineralsConsumption.ConsumeMineralType[i])
           _productionCount[i] += 1;
     }
 
@@ -100,7 +100,7 @@ namespace CodeBase.Production
         return;
       }
 
-      for (var i = 0; i < _consumptionMineralTypes.Count; i++) _productionCount[i] -= 1;
+      for (var i = 0; i < _mineralsConsumption.ConsumeMineralType.Count; i++) _productionCount[i] -= 1;
 
       _isMessageShowed = false;
       SetCurrentMineral();

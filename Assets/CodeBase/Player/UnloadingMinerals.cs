@@ -46,6 +46,7 @@ namespace CodeBase.Player
     private void FixedUpdate()
     {
       if (!_isEnteredConsumptionZone || _collectingMinerals.AllBagMinerals.Count <= 0) return;
+      if (!(_mineralsConsumption.ConsumeMineralType.Any(type => type == _collectingMinerals.AllBagMinerals[0].MineralType))) return;
 
       MineralStates mineral = _collectingMinerals.AllBagMinerals.Last();
       StoragePoint targetPoint = _mineralsConsumption.StoragePoints.FirstOrDefault(point => !point.IsInsideStorage);
